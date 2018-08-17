@@ -12,6 +12,7 @@ namespace app\portal\service;
 
 use app\portal\model\PortalPostModel;
 
+
 class PostService
 {
 
@@ -29,15 +30,16 @@ class PostService
     {
 
         $where = [
-            'a.create_time' => ['>=', 0],
-            'a.delete_time' => 0
+            //'a.create_time' => ['>=', 0],
+            //'a.delete_time' => 0
         ];
 
         $join = [
-            ['__USER__ u', 'a.user_id = u.id']
+            //['__USER__ u', 'a.user_id = u.id']
         ];
 
-        $field = 'a.*,u.user_login,u.user_nickname,u.user_email';
+        //$field = 'a.*,u.user_login,u.user_nickname,u.user_email';
+        $field = 'a.*';
 
         $category = empty($filter['category']) ? 0 : intval($filter['category']);
         if (!empty($category)) {
@@ -45,7 +47,12 @@ class PostService
             array_push($join, [
                 '__PORTAL_CATEGORY_POST__ b', 'a.id = b.post_id'
             ]);
-            $field = 'a.*,b.id AS post_category_id,b.list_order,b.category_id,u.user_login,u.user_nickname,u.user_email';
+            // $field = 'a.*,b.id AS post_category_id,b.list_order,b.category_id,u.user_login,u.user_nickname,u.user_email';
+            // 
+            $field = 'a.*,b.id AS post_category_id,b.list_order,b.category_id';
+        
+
+            $tmp_total = db('portal_category_post')->where('category_id',$category)->count();
         }
 
         $startTime = empty($filter['start_time']) ? 0 : strtotime($filter['start_time']);
@@ -66,18 +73,29 @@ class PostService
             $where['a.post_title'] = ['like', "%$keyword%"];
         }
 
-        if ($isPage) {
-            $where['a.post_type'] = 2;
-        } else {
-            $where['a.post_type'] = 1;
-        }
+        // if ($isPage) {
+        //     $where['a.post_type'] = 2;
+        // } else {
+        //     $where['a.post_type'] = 1;
+        // }
 
         $portalPostModel = new PortalPostModel();
-        $articles        = $portalPostModel->alias('a')->field($field)
+        if (!empty($category)) {
+             $articles        = $portalPostModel->alias('a')->field($field)
             ->join($join)
             ->where($where)
-            ->order('update_time', 'DESC')
+            ->order('b.post_id', 'DESC')
+            ->paginate(10,$tmp_total);
+
+        }else{
+
+            $articles        = $portalPostModel->alias('a')->field($field)
+            ->join($join)
+            ->where($where)
+            ->order('create_time', 'DESC')
             ->paginate(10);
+        }
+        
 
         return $articles;
 
