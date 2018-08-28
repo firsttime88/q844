@@ -130,7 +130,7 @@ abstract class Plugin
         if (!is_file($template)) {
             throw new TemplateNotFoundException('template not exists:' . $template, $template);
         }
-
+        
         return $this->view->fetch($template);
     }
 

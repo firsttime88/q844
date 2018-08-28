@@ -29,6 +29,8 @@ class PostService
     public function adminPostList($filter, $isPage = false)
     {
 
+        //print_r($filter);
+
         $where = [
             //'a.create_time' => ['>=', 0],
             //'a.delete_time' => 0
@@ -51,8 +53,16 @@ class PostService
             // 
             $field = 'a.*,b.id AS post_category_id,b.list_order,b.category_id';
         
+            $where_cat_count['category_id'] = $category;
 
-            $tmp_total = db('portal_category_post')->where('category_id',$category)->count();
+            if($filter['post_status'] !='n'){
+                 $where_cat_count['status'] = intval($filter['post_status']);
+                 $where['b.status'] = intval($filter['post_status']);
+            }
+
+            $tmp_total = db('portal_category_post')->where($where_cat_count)->count();
+
+            
         }
 
         $startTime = empty($filter['start_time']) ? 0 : strtotime($filter['start_time']);
@@ -79,21 +89,38 @@ class PostService
         //     $where['a.post_type'] = 1;
         // }
 
+        
+
+
         $portalPostModel = new PortalPostModel();
         if (!empty($category)) {
              $articles        = $portalPostModel->alias('a')->field($field)
             ->join($join)
             ->where($where)
+            ->order('b.status', 'DESC')
             ->order('b.post_id', 'DESC')
             ->paginate(10,$tmp_total);
 
         }else{
+            if($filter['post_status'] != 'n'){
+                $where['post_type'] = 1;
+                $where['post_status'] = intval($filter['post_status']);
+                $articles        = $portalPostModel->alias('a')->field($field)
+                ->join($join)
+                ->where($where)
+                ->order('create_time', 'DESC')
+                ->paginate(10);
+            }else{
+                $articles        = $portalPostModel->alias('a')->field($field)
+                ->join($join)
+                ->where($where)
+                ->order('post_type', 'DESC')
+                ->order('post_status', 'DESC')
+                ->order('create_time', 'DESC')
+                ->paginate(10);
+            }
 
-            $articles        = $portalPostModel->alias('a')->field($field)
-            ->join($join)
-            ->where($where)
-            ->order('create_time', 'DESC')
-            ->paginate(10);
+            
         }
         
 

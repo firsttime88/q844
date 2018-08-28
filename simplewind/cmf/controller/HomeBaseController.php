@@ -17,6 +17,8 @@ use think\View;
 class HomeBaseController extends BaseController
 {
 
+    protected $ismobile = 0;
+
     public function _initialize()
     {
         // 监听home_init
@@ -24,6 +26,12 @@ class HomeBaseController extends BaseController
         parent::_initialize();
         $siteInfo = cmf_get_site_info();
         View::share('site_info', $siteInfo);
+        if(config('template.view_base') == 'themes/simpleboot3/'){
+            $this->ismobile = 0;
+        }else{
+            $this->ismobile = 1;
+        }
+
     }
 
     public function _initializeView()

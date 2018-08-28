@@ -34,9 +34,20 @@ class AdminArticleController extends AdminBaseController
      */
     public function index()
     {
+
+
+
+
         $param = $this->request->param();
 
+        if(!isset($param['post_status'])){
+             $param['post_status'] = 'n';
+        }
+       
+
         $categoryId = $this->request->param('category', 0, 'intval');
+
+       
 
         $postService = new PostService();
         $data        = $postService->adminArticleList($param);
@@ -45,6 +56,8 @@ class AdminArticleController extends AdminBaseController
 
         $portalCategoryModel = new PortalCategoryModel();
         $categoryTree        = $portalCategoryModel->adminCategoryTree($categoryId);
+
+        $this->assign('post_status', isset($param['post_status']) ? $param['post_status'] : 'n');
 
         $this->assign('start_time', isset($param['start_time']) ? $param['start_time'] : '');
         $this->assign('end_time', isset($param['end_time']) ? $param['end_time'] : '');
