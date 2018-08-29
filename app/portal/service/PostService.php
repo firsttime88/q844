@@ -145,6 +145,8 @@ class PostService
             $article = $portalPostModel->alias('post')->field('post.*')
                 ->where($where)
                 ->find();
+
+                
         } else {
             $where = [
                 'post.post_type'       => 1,
@@ -164,7 +166,7 @@ class PostService
                 ->find();
         }
 
-
+        
         return $article;
     }
 

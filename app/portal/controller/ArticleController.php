@@ -21,12 +21,16 @@ class ArticleController extends HomeBaseController
     public function index()
     {
 
+
         $portalCategoryModel = new PortalCategoryModel();
         $postService         = new PostService();
 
         $articleId  = $this->request->param('id', 0, 'intval');
         $categoryId = $this->request->param('cid', 0, 'intval');
+
+        
         $article    = $postService->publishedArticle($articleId, $categoryId);
+
 
         if (empty($article)) {
             abort(404, '文章不存在!');
@@ -34,6 +38,7 @@ class ArticleController extends HomeBaseController
 
 
         $prevArticle = $postService->publishedPrevArticle($articleId, $categoryId);
+
         $nextArticle = $postService->publishedNextArticle($articleId, $categoryId);
 
         $tplName = 'article';
