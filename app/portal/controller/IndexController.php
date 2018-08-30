@@ -26,7 +26,7 @@ class IndexController extends HomeBaseController
     }
 
     private function _wapindex(){
-
+        //echo 1%2;die;
         //最新更新
         $new_list = Db::name('portal_post')->where('post_status',1)->order('post_status desc')->order('create_time desc')->field('id,post_title,post_excerpt')->limit(8)->select();
         // $new_list_ids = array();
@@ -42,33 +42,198 @@ class IndexController extends HomeBaseController
 
         //励志语录
         
-        //$lzyl_list = ;
+        $lzyl_id_list = Db::name('portal_category_post')->where('category_id','in',[1,10,11,12,13,14])->where('status',1)->order('create_time desc')->limit(7)->column('category_id','post_id');
+
+        
+        $lzyl_catid_list = array_unique(array_values($lzyl_id_list));
+
+
+        $lzyl_cat_list = Db::name('portal_category')->where('id','in',$lzyl_catid_list)->column('name','id');
+
+
+
+        $lzyl_list = Db::name('portal_post')->where('id','in',array_keys($lzyl_id_list))->field('id,post_title,post_excerpt')->select();
         
 
-
+         $this->assign('lzyl_list',$lzyl_list);
+         $this->assign('lzyl_cat_list',$lzyl_cat_list);
+         $this->assign('lzyl_id_list',$lzyl_id_list);
         //励志影视
         
 
+        $lzys_id_list = Db::name('portal_category_post')->where('category_id','in',[2,15,16,17,18,19])->where('status',1)->order('create_time desc')->limit(7)->column('category_id','post_id');
+
+        
+        $lzys_catid_list = array_unique(array_values($lzys_id_list));
+
+
+        $lzys_cat_list = Db::name('portal_category')->where('id','in',$lzys_catid_list)->column('name','id');
+
+
+
+        $lzys_list = Db::name('portal_post')->where('id','in',array_keys($lzys_id_list))->field('id,post_title,post_excerpt')->select();
+        
+
+         $this->assign('lzys_list',$lzys_list);
+         $this->assign('lzys_cat_list',$lzys_cat_list);
+         $this->assign('lzys_id_list',$lzys_id_list);
+
+
+
         //励志文章
+        
+
+         $lzwz_id_list = Db::name('portal_category_post')->where('category_id','in',[3,20,21,22,23,24,25,26,27])->where('status',1)->order('create_time desc')->limit(7)->column('category_id','post_id');
+
+        
+        $lzwz_catid_list = array_unique(array_values($lzwz_id_list));
+
+
+        $lzwz_cat_list = Db::name('portal_category')->where('id','in',$lzwz_catid_list)->column('name','id');
+
+
+
+        $lzwz_list = Db::name('portal_post')->where('id','in',array_keys($lzwz_id_list))->field('id,post_title,post_excerpt')->select();
+        
+
+         $this->assign('lzwz_list',$lzwz_list);
+         $this->assign('lzwz_cat_list',$lzwz_cat_list);
+         $this->assign('lzwz_id_list',$lzwz_id_list);
+
+
        
 
         //励志人群
+        
+
+        $lzrq_id_list = Db::name('portal_category_post')->where('category_id','in',[4,28,29,30,31,32,33,34,35,36])->where('status',1)->order('create_time desc')->limit(7)->column('category_id','post_id');
+
+        
+        $lzrq_catid_list = array_unique(array_values($lzrq_id_list));
+
+
+        $lzrq_cat_list = Db::name('portal_category')->where('id','in',$lzrq_catid_list)->column('name','id');
+
+
+
+        $lzrq_list = Db::name('portal_post')->where('id','in',array_keys($lzrq_id_list))->field('id,post_title,post_excerpt')->select();
+        
+
+         $this->assign('lzrq_list',$lzrq_list);
+         $this->assign('lzrq_cat_list',$lzrq_cat_list);
+         $this->assign('lzrq_id_list',$lzrq_id_list);
+
+
 
 
         //语录短信
+        
+         $yldx_id_list = Db::name('portal_category_post')->where('category_id','in',[5,37,38,39,40,41])->where('status',1)->order('create_time desc')->limit(7)->column('category_id','post_id');
+
+        
+        $yldx_catid_list = array_unique(array_values($yldx_id_list));
+
+
+        $yldx_cat_list = Db::name('portal_category')->where('id','in',$yldx_catid_list)->column('name','id');
+
+
+
+        $yldx_list = Db::name('portal_post')->where('id','in',array_keys($yldx_id_list))->field('id,post_title,post_excerpt')->select();
+        
+
+         $this->assign('yldx_list',$yldx_list);
+         $this->assign('yldx_cat_list',$yldx_cat_list);
+         $this->assign('yldx_id_list',$yldx_id_list);
+
+
 
 
         //励志短句
 
 
+        $lzdj_id_list = Db::name('portal_category_post')->where('category_id','in',[6,42,43,44])->where('status',1)->order('create_time desc')->limit(7)->column('category_id','post_id');
+
+        
+        $lzdj_catid_list = array_unique(array_values($lzdj_id_list));
+
+
+        $lzdj_cat_list = Db::name('portal_category')->where('id','in',$lzdj_catid_list)->column('name','id');
+
+
+
+        $lzdj_list = Db::name('portal_post')->where('id','in',array_keys($lzdj_id_list))->field('id,post_title,post_excerpt')->select();
+        
+
+         $this->assign('lzdj_list',$lzdj_list);
+         $this->assign('lzdj_cat_list',$lzdj_cat_list);
+         $this->assign('lzdj_id_list',$lzdj_id_list);
+
+
+
+
         //文言古诗
+
+
+         $wygs_id_list = Db::name('portal_category_post')->where('category_id','in',[7,45,46,47,48,49,50])->where('status',1)->order('create_time desc')->limit(7)->column('category_id','post_id');
+
+        
+        $wygs_catid_list = array_unique(array_values($wygs_id_list));
+
+
+        $wygs_cat_list = Db::name('portal_category')->where('id','in',$wygs_catid_list)->column('name','id');
+
+
+
+        $wygs_list = Db::name('portal_post')->where('id','in',array_keys($wygs_id_list))->field('id,post_title,post_excerpt')->select();
+        
+
+         $this->assign('wygs_list',$wygs_list);
+         $this->assign('wygs_cat_list',$wygs_cat_list);
+         $this->assign('wygs_id_list',$wygs_id_list);
+
+
 
 
         //范文大全
 
+        $fwdq_id_list = Db::name('portal_category_post')->where('category_id','in',[8,51,52,53,54,55,56])->where('status',1)->order('create_time desc')->limit(7)->column('category_id','post_id');
+
+        
+        $fwdq_catid_list = array_unique(array_values($fwdq_id_list));
+
+
+        $fwdq_cat_list = Db::name('portal_category')->where('id','in',$fwdq_catid_list)->column('name','id');
+
+
+
+        $fwdq_list = Db::name('portal_post')->where('id','in',array_keys($fwdq_id_list))->field('id,post_title,post_excerpt')->select();
+        
+
+        $this->assign('fwdq_list',$fwdq_list);
+        $this->assign('fwdq_cat_list',$fwdq_cat_list);
+        $this->assign('fwdq_id_list',$fwdq_id_list);
+
+
 
         //网名大全
     	
+        $wmdq_id_list = Db::name('portal_category_post')->where('category_id','in',[9,57,58,59])->where('status',1)->order('create_time desc')->limit(7)->column('category_id','post_id');
+
+        
+        $wmdq_catid_list = array_unique(array_values($wmdq_id_list));
+
+
+        $wmdq_cat_list = Db::name('portal_category')->where('id','in',$wmdq_catid_list)->column('name','id');
+
+
+
+        $wmdq_list = Db::name('portal_post')->where('id','in',array_keys($wmdq_id_list))->field('id,post_title,post_excerpt')->select();
+        
+
+        $this->assign('wmdq_list',$wmdq_list);
+        $this->assign('wmdq_cat_list',$wmdq_cat_list);
+        $this->assign('wmdq_id_list',$wmdq_id_list);
+
 
 
         //友情链接

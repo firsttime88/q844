@@ -18,6 +18,7 @@ class ListController extends HomeBaseController
     public function index()
     {
         $id                  = $this->request->param('id', 0, 'intval');
+        echo $id;die;
         $portalCategoryModel = new PortalCategoryModel();
 
         $category = $portalCategoryModel->where('id', $id)->where('status', 1)->find();

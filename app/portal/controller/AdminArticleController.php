@@ -152,6 +152,17 @@ class AdminArticleController extends AdminBaseController
             hook('portal_admin_after_save_article', $hookParam);
 
 
+            if($data['post']['post_status'] == 1){
+
+
+
+            Db::name('portal_category_post')->where('post_id',$data['post']['id'])->update(['status' => 1,'create_time'=>time()]);
+
+            }else{
+                 Db::name('portal_category_post')->where('post_id',$data['post']['id'])->update(['status' => 0,'create_time'=>time()]);
+            }
+
+
             $this->success('添加成功!', url('AdminArticle/edit', ['id' => $portalPostModel->id]));
         }
 
@@ -208,6 +219,7 @@ class AdminArticleController extends AdminBaseController
         if ($this->request->isPost()) {
             $data   = $this->request->param();
 
+            $tmp_post_status = isset($data['post']['post_status'])?$data['post']['post_status']:[];
             //需要抹除发布、置顶、推荐的修改。
             unset($data['post']['post_status']);
             unset($data['post']['is_top']);
@@ -244,6 +256,16 @@ class AdminArticleController extends AdminBaseController
                 'article' => $data['post']
             ];
             hook('portal_admin_after_save_article', $hookParam);
+
+             if($tmp_post_status == 1){
+
+                 Db::name('portal_category_post')->where('post_id',$data['post']['id'])->update(['status' => 1,'create_time'=>time()]);
+
+            }else{
+                 Db::name('portal_category_post')->where('post_id',$data['post']['id'])->update(['status' => 0,'create_time'=>time()]);
+            }
+
+
 
             $this->success('保存成功!');
 
@@ -342,8 +364,10 @@ class AdminArticleController extends AdminBaseController
         if (isset($param['ids']) && isset($param["yes"])) {
             $ids = $this->request->param('ids/a');
 
-            $portalPostModel->where(['id' => ['in', $ids]])->update(['post_status' => 1, 'published_time' => time()]);
+            $portalPostModel->where(['id' => ['in', $ids]])->update(['post_status' => 1, 'published_time' => time(),'create_time'=>time(),'update_time'=>time()]);
 
+            Db::name('portal_category_post')->where(['post_id' => ['in', $ids]])->update(['status' => 1,'create_time'=>time()]);
+          
             $this->success("发布成功！", '');
         }
 
@@ -351,6 +375,9 @@ class AdminArticleController extends AdminBaseController
             $ids = $this->request->param('ids/a');
 
             $portalPostModel->where(['id' => ['in', $ids]])->update(['post_status' => 0]);
+
+            Db::name('portal_category_post')->where(['post_id' => ['in', $ids]])->update(['status' => 0]);
+
 
             $this->success("取消发布成功！", '');
         }
