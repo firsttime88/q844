@@ -25,6 +25,53 @@ class IndexController extends HomeBaseController
         return $this->fetch(':index');
     }
 
+
+    public function gywm()
+    {
+       
+
+        return $this->fetch(':gywm');
+    }
+
+
+
+     public function map()
+    {
+       
+        $lists = Db::name('portal_category')->where('parent_id','in',[1,2,3,4,5,6,7,8,9])->select();
+        $all_list = array();
+
+        foreach ($lists as $key => $value) {
+            
+            $all_list[$value['parent_id']][] = $lists[$key];
+
+        }
+
+        $this->assign('all_list',$all_list);
+      
+        return $this->fetch(':map');
+    }
+
+
+    public function taglist(){
+
+        $new_list = Db::name('portal_tag')->where('status',1)->order('id desc')->limit(100)->select();
+
+        $hot_list = Db::name('portal_tag')->where('status',1)->order('recommended desc')->limit(100)->select();
+
+        $rand_list = Db::name('portal_tag')->where('status',1)->orderRaw('rand()')->limit(100)->select();
+
+
+        $this->assign('rand_list',$rand_list);
+        $this->assign('hot_list',$hot_list);
+        $this->assign('new_list',$new_list);
+
+        return $this->fetch(':taglist');
+    }
+
+
+
+
     private function _wapindex(){
         //echo 1%2;die;
         //最新更新

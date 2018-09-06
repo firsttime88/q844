@@ -1969,3 +1969,39 @@ function cmf_check_mobile($mobile)
         return false;
     }
 }
+
+
+
+
+
+function cmf_showpage($page,$totalPage,$pageUrl){
+
+        //$totalPage = ceil($totalPage/15);
+        $prevPage=($page>1)?$page-1:1;
+        $nextPage=($page>=$totalPage)?$totalPage:$page+1;
+        $prev = ($page == 1) ? "" : "<a href='".$pageUrl."?page=".$prevPage."' target='_self' >&lt;上一页</a>";
+        $next = ($page == $totalPage) ? "" : "<a href='".$pageUrl."?page=".$nextPage."'  target='_self'>下一页&gt;</a>";
+        $p="";
+        $pageArr=$prevs=$page/7;
+        if($pageArr==1){
+            $prevs=0;
+        }
+        for($i = floor($prevs)+1; $i<=ceil($pageArr);$i++){
+            //当前页无连接
+            if($i<=$totalPage){
+                $p = "<a href='javascript:'  target='_self'>$page/$totalPage</a>";
+                // if ($page == $i) {
+                //     $p = "<a href=''  target='_self'>$page/$totalPage</a>";
+                // } else {
+                //     $p = "<a href='".$pageUrl."?page=".$i."' target='_self' >$page/$totalPage</a>";
+                // }
+            }
+        }
+        if($totalPage > 1){
+            $pageStr='<div class="pageBox">'.$prev.$p. $next.'</div>';
+        }else{
+            $pageStr='';
+        }
+        
+        return $pageStr;
+    }

@@ -29,6 +29,8 @@ class PostService
     public function adminPostList($filter, $isPage = false)
     {
 
+        $filter['post_status'] = isset($filter['post_status'])?$filter['post_status']:'n';
+
         //print_r($filter);
 
         $where = [
