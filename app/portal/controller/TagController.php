@@ -47,6 +47,10 @@ class TagController extends HomeBaseController
 
         $tmp_lists = Db::name('portal_tag_post')->where('status',1)->order('tag_id desc')->limit($start,$perpage)->column('post_id');
 
+       
+
+        $lists = Db::query('SELECT `id`,`post_title`,`post_excerpt` FROM `cmf_portal_post`  WHERE `id` in ('.join(',',$tmp_lists).') and  `post_status` = 1 ORDER BY `create_time` DESC LIMIT ?,?' ,[$start,$perpage]);
+
         
 
         $totalPage = ceil($total_count/$perpage);

@@ -28,8 +28,10 @@ class HomeBaseController extends BaseController
         View::share('site_info', $siteInfo);
         if(config('template.view_base') == 'themes/simpleboot3/'){
             $this->ismobile = 0;
+            
         }else{
             $this->ismobile = 1;
+
         }
 
     }
