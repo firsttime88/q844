@@ -2005,3 +2005,43 @@ function cmf_showpage($page,$totalPage,$pageUrl){
         
         return $pageStr;
     }
+
+
+
+function cmf_pc_showpage($page,$totalPage,$pageUrl){
+
+        //$totalPage = ceil($totalPage/15);
+        $prevPage=($page>1)?$page-1:1;
+        $nextPage=($page>=$totalPage)?$totalPage:$page+1;
+        $prev = ($page == 1) ? "" : "<a href='".$pageUrl."?page=".$prevPage."' target='_self' >上一页</a>";
+        $next = ($page == $totalPage) ? "" : "<a href='".$pageUrl."?page=".$nextPage."'  target='_self'>下一页</a>";
+        $p="";
+        $pageArr=$prevs=$page/7;
+        if($pageArr==1){
+            $prevs=0;
+        }
+
+        //echo ceil($pageArr);
+        // for($i = floor($prevs)+1; $i<=$totalPage;$i++){
+        //     //当前页无连接
+        //     if($i<=$totalPage){
+        //         //echo $i;
+        //         //$p = "<a href='javascript:'  target='_self'>$page/$totalPage</a>";
+        //         if ($page == $i) {
+        //            $p = "<a href='javascript:'; class='hover'  target='_self'>$i</a>";
+        //        } else {
+        //             $p .= "<a href='".$pageUrl."?page=".$i."' target='_self' >$i</a>";
+        //         }
+        //     }
+        // }
+        if($totalPage > 1){
+
+
+
+            $pageStr=' <div class="page"><em>共'.$totalPage.'页</em>'.$prev.$p. $next.'</div>';
+        }else{
+            $pageStr='';
+        }
+        
+        return $pageStr;
+    }

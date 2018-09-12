@@ -16,6 +16,8 @@ use think\Db;
 
 class ListController extends HomeBaseController
 {
+
+
     public function index()
     {
 
@@ -29,6 +31,15 @@ class ListController extends HomeBaseController
 
         $this->assign('category', $category);
         $this->assign('category_id', $id);
+
+
+        $new_list = Db::name('portal_post')->where('post_status',1)->order('post_status desc')->order('create_time desc')->field('id,post_title,post_excerpt')->limit(21)->select();
+
+        $this->assign('new_list',$new_list);
+
+
+
+
 
 
 
@@ -59,6 +70,8 @@ class ListController extends HomeBaseController
                 
             }
 
+
+
             $this->assign('child_category_articles', $child_category_articles);
 
             return $this->fetch('/category');
@@ -86,8 +99,12 @@ class ListController extends HomeBaseController
 
            $pageUrl = cmf_url('portal/List/index',array('id'=>$id));
 
-           $page_str = cmf_showpage($page,$totalPage,$pageUrl);
-
+          
+           if($this->ismobile == 1){
+                $page_str = cmf_showpage($page,$totalPage,$pageUrl);
+           }else{
+                $page_str = cmf_pc_showpage($page,$totalPage,$pageUrl);
+           }
            
            $this->assign('lists', $lists);
            $this->assign('parent_category', $parent_category);

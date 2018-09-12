@@ -88,33 +88,77 @@ class ArticleController extends HomeBaseController
             $tplName = empty($category["one_tpl"]) ? $tplName : $category["one_tpl"];
         }
 
+        
+
+
+
+
+
+
+
         Db::name('portal_post')->where(['id' => $articleId])->setInc('post_hits');
 
 
         hook('portal_before_assign_article', $article);
 
         
-        //猜你喜欢
+        if($this->ismobile == 0){
+
+            //猜你喜欢
+
+            
+
+
+            $tmp_list = Db::name('portal_category_post')->where('category_id',$article['categories'][0]['id'])->where('status',1)->order('create_time desc')->limit(14)->column('category_id','post_id');
+
+            $xgnr_list = Db::name('portal_post')->where('id','in',array_keys($tmp_list))->field('id,post_title,post_excerpt,create_time')->select();
+            
+            $xgnr_catid_list = array_unique(array_values($tmp_list));
+
+
+            $xgnr_cat_list = Db::name('portal_category')->where('id','in',$xgnr_catid_list)->column('name','id');
+
+            
+
+            $this->assign('xgnr_cat_list', $xgnr_cat_list);
+            $this->assign('tmp_xgnr_catid_list', $tmp_list);
+            $this->assign('xgnr_list', $xgnr_list);
+
+
+
+            $new_list = Db::name('portal_post')->where('post_status',1)->order('post_status desc')->order('create_time desc')->field('id,post_title,post_excerpt')->limit(21)->select();
+
+            $this->assign('new_list',$new_list);
+
+        }else{
+
+            //猜你喜欢
         
-        $new_list = Db::name('portal_post')->where('post_status',1)->order('post_status desc')->order('create_time desc')->field('id,post_title,post_excerpt')->limit(6)->select();
+            $new_list = Db::name('portal_post')->where('post_status',1)->order('post_status desc')->order('create_time desc')->field('id,post_title,post_excerpt')->limit(6)->select();
+
+            $this->assign('new_list', $new_list);
+            
+
+            //相关内容
 
 
-
-        //相关内容
-
-
-        $tmp_list = Db::name('portal_category_post')->where('category_id',$article['categories'][0]['id'])->where('status',1)->order('create_time desc')->limit(5)->column('post_id');
-        
+            $tmp_list = Db::name('portal_category_post')->where('category_id',$article['categories'][0]['id'])->where('status',1)->order('create_time desc')->limit(5)->column('post_id');
+            
 
 
-        $xgnr_list = Db::name('portal_post')->where('id','in',$tmp_list)->field('id,post_title,post_excerpt,create_time')->select();
+            $xgnr_list = Db::name('portal_post')->where('id','in',$tmp_list)->field('id,post_title,post_excerpt,create_time')->select();
+            $this->assign('xgnr_list', $xgnr_list);
+
+        }
+
+
 
 
 
 
         $this->assign('article', $article);
-        $this->assign('xgnr_list', $xgnr_list);
-        $this->assign('new_list', $new_list);
+        
+        
 
 
         $this->assign('prev_article', $prevArticle);
